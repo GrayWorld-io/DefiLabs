@@ -19,10 +19,4 @@ export function getFactoryContract(networkId: number) {
 export function getFactoryFactory() {
     return Factory__factory;
 }
-// export function doesTokenExist(address, signer) {
-//     try {
-//         return new Contract(address, ERC20.abi, signer);
-//     } catch (err) {
-//         return false;
-//     }
-// }
+

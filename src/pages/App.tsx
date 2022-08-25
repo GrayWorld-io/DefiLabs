@@ -3,6 +3,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { useWeb3React } from '@web3-react/core';
+import { SnackbarProvider } from "notistack";
+
 import { injected } from '../connectors/connector'
 
 import NavBar from '../components/NavBar/NavBar';
@@ -35,6 +37,7 @@ const App = () => {
 
   return (
     <div>
+      <SnackbarProvider>
       <div>
         <p>Account: {account}</p>
         <p>ChainId: {chainId}</p>
@@ -52,6 +55,7 @@ const App = () => {
           </Route>
         </Routes>
       </BrowserRouter>
+      </SnackbarProvider>
     </div>
   )
 }
