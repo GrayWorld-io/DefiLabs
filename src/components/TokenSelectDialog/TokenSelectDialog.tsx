@@ -118,7 +118,6 @@ export default function TokenSelectDialog(props: any) {
         onClose(value);
     };
 
-
     // Called when the user tries to input a custom address, this function will validate the address and will either
     // then close the dialog and return the validated address, or will display an error.
     const submit = () => {

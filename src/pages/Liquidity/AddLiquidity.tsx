@@ -6,14 +6,54 @@ import {
     makeStyles,
     Paper,
     Typography,
-  } from "@material-ui/core";
+} from "@material-ui/core";
+import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import { useSnackbar } from "notistack";
 
 import TokenSelectDialog from "../../components/TokenSelectDialog/TokenSelectDialog";
-import TokenInputField from "../../components/TokenSelectDialog/TokenInputField";
+import TokenInputField from "../../components/TokenInputField";
+import LoadingButton from "../../components/LoadingButton";
+
+import { getTokenBalanceAndSymbol, getAccountBalance } from "../../utils";
+
+
+const useStyles = makeStyles((theme) => ({
+    paperContainer: {
+        borderRadius: theme.spacing(2),
+        padding: theme.spacing(2),
+        paddingBottom: theme.spacing(3),
+        width: "40%",
+        overflow: "wrap",
+        background: "linear-gradient(45deg, #ff0000 30%, #FF8E53 90%)",
+        color: "white",
+      },
+      fullWidth: {
+        width: "100%",
+      },
+      values: {
+        width: "50%",
+      },
+      title: {
+        textAlign: "center",
+        padding: theme.spacing(0.5),
+        marginBottom: theme.spacing(1),
+      },
+      hr: {
+        width: "100%",
+      },
+      balance: {
+        padding: theme.spacing(1),
+        overflow: "wrap",
+        textAlign: "center",
+      },
+      buttonIcon: {
+        marginRight: theme.spacing(1),
+        padding: theme.spacing(0.4),
+      },
+}));
 
 const AddLiquidity = (props: any) => {
-
+    const classes = useStyles();
     const { enqueueSnackbar } = useSnackbar();
     // Stores a record of whether their respective dialog window is open
     const [dialog1Open, setDialog1Open] = React.useState(false);
@@ -21,14 +61,14 @@ const AddLiquidity = (props: any) => {
 
     // Stores data about their respective coin
     const [coin1, setCoin1] = React.useState({
-        address: undefined,
-        symbol: undefined,
-        balance: undefined,
+        address: "",
+        symbol: "",
+        balance: "",
     });
     const [coin2, setCoin2] = React.useState({
-        address: undefined,
-        symbol: undefined,
-        balance: undefined,
+        address: "",
+        symbol: "",
+        balance: "",
     });
 
     // Stores the current reserves in the liquidity pool between coin1 and coin2
@@ -83,8 +123,8 @@ const AddLiquidity = (props: any) => {
             0 < parsedInput1 &&
             parsedInput2 !== NaN &&
             0 < parsedInput2 &&
-            parsedInput1 <= coin1.balance! &&
-            parsedInput2 <= coin2.balance!
+            parsedInput1 <= parseFloat(coin1.balance) &&
+            parsedInput2 <= parseFloat(coin2.balance)
         );
     };
 
@@ -97,21 +137,53 @@ const AddLiquidity = (props: any) => {
     }
 
     // Called when the dialog window for coin1 exits
-    const onToken1Selected = (address: string) => {
+    const onToken1Selected = (tokenAddress: string) => {
         // Close the dialog window
         setDialog1Open(false);
-
-        if (address == "ETH") {
-
+        if (tokenAddress == "ETH") {
+            getAccountBalance(props.account)
+                .then((data) => {
+                    setCoin1({
+                        address: tokenAddress,
+                        symbol: data.symbol,
+                        balance: data.balance
+                    })
+                })
         } else {
-            
+            getTokenBalanceAndSymbol(props.account, tokenAddress)
+                .then((data) => {
+                    setCoin1({
+                        address: tokenAddress,
+                        symbol: data.symbol,
+                        balance: data.balance
+                    })
+                });
         }
     }
 
     // Called when the dialog window for coin1 exits
-    const onToken2Selected = (address: string) => {
+    const onToken2Selected = (tokenAddress: string) => {
         // Close the dialog window
         setDialog2Open(false);
+        if (tokenAddress == "ETH") {
+            getAccountBalance(props.account)
+                .then((data) => {
+                    setCoin2({
+                        address: tokenAddress,
+                        symbol: data.symbol,
+                        balance: data.balance
+                    })
+                })
+        } else {
+            getTokenBalanceAndSymbol(props.account, tokenAddress)
+                .then((data) => {
+                    setCoin2({
+                        address: tokenAddress,
+                        symbol: data.symbol,
+                        balance: data.balance
+                    })
+                });
+        }
 
     }
 
@@ -139,6 +211,9 @@ const AddLiquidity = (props: any) => {
     });
     return (
         <div>
+            {/* Liquidity deployer */}
+            <Typography variant="h5" className={classes.title}></Typography>
+
             {/* Dialog Windows */}
             <TokenSelectDialog
                 open={dialog1Open}
@@ -149,24 +224,138 @@ const AddLiquidity = (props: any) => {
                 onClose={onToken2Selected}
             />
             <Grid container direction="column" alignItems="center" spacing={2}>
-                <Grid item xs={12}>
+                <Grid item xs={12} className={classes.fullWidth}>
                     <TokenInputField
                         activeField={true}
                         value={field1Value}
                         onClick={() => setDialog1Open(true)}
                         onChange={handleChange.field1}
-                        symbol={coin1.symbol !== undefined ? coin1.symbol : "Select"}
+                        symbol={coin1.symbol !== "" ? coin1.symbol : "Select"}
                     />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} className={classes.fullWidth}>
                     <TokenInputField
                         activeField={true}
                         value={field2Value}
                         onClick={() => setDialog2Open(true)}
                         onChange={handleChange.field2}
-                        symbol={coin2.symbol !== undefined ? coin2.symbol : "Select"}
+                        symbol={coin2.symbol !== "" ? coin2.symbol : "Select"}
                     />
                 </Grid>
+            </Grid>
+
+            <Grid
+                container
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+                spacing={4}
+                className={classes.balance}
+            >
+                <hr className={classes.hr} />
+                <Grid
+                    container
+                    item
+                    className={classes.values}
+                    direction="column"
+                    alignItems="center"
+                    spacing={2}
+                >
+                    {/* Balance Display */}
+                    <Typography variant="h6">Your Balances</Typography>
+                    <Grid container direction="row" justifyContent="space-between">
+                        <Grid item xs={6}>
+                            <Typography variant="body1" className={classes.balance}>
+                                {formatBalance(coin1.balance, coin1.symbol)}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Typography variant="body1" className={classes.balance}>
+                                {formatBalance(coin2.balance, coin2.symbol)}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+
+                    <hr className={classes.hr} />
+                    {/* Reserves Display */}
+                    <Typography variant="h6">Reserves</Typography>
+                    <Grid container direction="row" justifyContent="space-between">
+                        <Grid item xs={6}>
+                            <Typography variant="body1" className={classes.balance}>
+                                {formatReserve(reserves[0], coin1.symbol)}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Typography variant="body1" className={classes.balance}>
+                                {formatReserve(reserves[1], coin2.symbol)}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+
+                    <hr className={classes.hr} />
+
+                    {/* Liquidity Tokens Display */}
+                    <Typography variant="h6">Your Liquidity Pool Tokens</Typography>
+                    <Grid container direction="row" justifyContent="center">
+                        <Grid item xs={6}>
+                            <Typography variant="body1" className={classes.balance}>
+                                {formatReserve(liquidityTokens, "UNI-V2")}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Grid>
+
+                <Paper className={classes.paperContainer}>
+                    {/*Red  Display to show the quote */}
+                    <Grid
+                        container
+                        item
+                        direction="column"
+                        alignItems="center"
+                        spacing={2}
+                        className={classes.fullWidth}
+                    >
+                        {/* Tokens in */}
+                        <Typography variant="h6">Tokens in</Typography>
+                        <Grid container direction="row" justifyContent="space-between">
+                            <Grid item xs={6}>
+                                <Typography variant="body1" className={classes.balance}>
+                                    {/* {formatBalance(liquidityOut[0], coin1.symbol)} */}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Typography variant="body1" className={classes.balance}>
+                                    {/* {formatBalance(liquidityOut[1], coin2.symbol)} */}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+
+                        <hr className={classes.hr} />
+
+                        {/* Liquidity Tokens Display */}
+                        <Typography variant="h6">Liquidity Pool Tokens Out</Typography>
+                        <Grid container direction="row" justifyContent="center">
+                            <Grid item xs={6}>
+                                <Typography variant="body1" className={classes.balance}>
+                                    {/* {formatReserve(liquidityOut[2], "UNI-V2")} */}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Paper>
+            </Grid>
+
+            <Grid container direction="column" alignItems="center" spacing={2}>
+                <LoadingButton
+                    loading={loading}
+                    valid={isButtonEnabled()}
+                    success={false}
+                    fail={false}
+                    onClick={deploy}
+                >
+                    <AccountBalanceIcon className={classes.buttonIcon} />
+                    Add Liquidity
+                </LoadingButton>
             </Grid>
         </div>
     )

@@ -11,6 +11,8 @@ import NavBar from '../components/NavBar/NavBar';
 import Swap from './Swap/Swap';
 import Liquidity from './Liquidity/Liquidity';
 
+import "./App.css";
+
 const App = () => {
   const {
     chainId,
@@ -36,25 +38,25 @@ const App = () => {
   }
 
   return (
-    <div>
-      <SnackbarProvider>
-      <div>
-        <p>Account: {account}</p>
-        <p>ChainId: {chainId}</p>
-      </div>
-      <div>
-        <button type="button" onClick={handleConnect}>{active ? 'disconnect' : 'connect'}</button>
-      </div>
+    <div className="App">
+      <SnackbarProvider maxSnack={3}>
+        <div>
+          <p>Account: {account}</p>
+          <p>ChainId: {chainId}</p>
+        </div>
+        <div>
+          <button type="button" onClick={handleConnect}>{active ? 'disconnect' : 'connect'}</button>
+        </div>
 
-      <BrowserRouter>
-      <NavBar />
-        <Routes>
-          <Route path="/" element={<Swap account={account} network={chainId}  />} >
-          </Route>
-          <Route path="/liquidity" element={<Liquidity account={account} network={chainId}  />} >
-          </Route>
-        </Routes>
-      </BrowserRouter>
+        <BrowserRouter>
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Swap account={account} network={chainId} />} >
+            </Route>
+            <Route path="/liquidity" element={<Liquidity account={account} network={chainId} />} >
+            </Route>
+          </Routes>
+        </BrowserRouter>
       </SnackbarProvider>
     </div>
   )

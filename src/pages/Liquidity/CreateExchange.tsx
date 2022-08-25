@@ -2,8 +2,14 @@ import React, { ChangeEvent, useState } from "react";
 import ethers from 'ethers';
 
 import { getFactoryContract } from '../../utils';
+import { Button, makeStyles, TextField, Grid } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+
+}));
 
 const CreateExchange = (props: any) => {
+    const classes = useStyles();
 
     const [newExchangeToken, setNewExchangeTokenInput] = useState<string>('');
 
@@ -19,15 +25,16 @@ const CreateExchange = (props: any) => {
 
     return (
         <div>
+            <Grid container direction="row" justifyContent="space-between">
+                <Grid item xs={8}>
+                    <TextField fullWidth label="TokenAddress" color="secondary" focused onChange={handleNewExchangeTokenChange} />
+                </Grid>
+                <Grid item xs={4}>
+                    <Button color="secondary" variant="outlined" onClick={handleCreateExchange}>Create Exchange</Button>
+                </Grid>
 
-            <div>
+            </Grid>
 
-                <input id="greetingInput"
-                    type="text"
-                    placeholder="token address"
-                    onChange={handleNewExchangeTokenChange}/>
-                <button type="button" onClick={handleCreateExchange}>CreateExchange</button>
-            </div>
         </div>
     )
 }

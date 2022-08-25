@@ -1,8 +1,10 @@
 import React, { ChangeEvent, useState } from "react";
 import {
+    Theme,
     Container,
     Grid,
     makeStyles,
+    createStyles,
     Paper,
     Typography,
 } from "@material-ui/core";
@@ -14,17 +16,38 @@ import SwitchButton from './SwitchButton';
 import AddLiquidity from './AddLiquidity';
 import RemoveLiquidity from './RemoveLiquidity';
 
+const styles = (theme: Theme) => createStyles({
+    paperContainer: {
+        borderRadius: theme.spacing(2),
+        padding: theme.spacing(1),
+        paddingBottom: theme.spacing(3),
+        maxWidth: 700,
+        margin: "auto",
+    },
+    title: {
+        textAlign: "center",
+        padding: theme.spacing(0.5),
+        marginBottom: theme.spacing(1),
+    },
+    footer: {
+        marginTop: "155px",
+    },
+});
+
+const useStyles = makeStyles(styles);
+
 const Liquidity = (props: any) => {
+    const classes = useStyles();
 
     const [newExchangeToken, setNewExchangeTokenInput] = useState<string>('');
 
     const [addState, setAddState] = React.useState(true);
 
-    const deploy_or_remove = (deploy: boolean) => {
+    const add_or_remove = (deploy: boolean) => {
         if (deploy === true) {
-            return <AddLiquidity network={props.network} />;
+            return <AddLiquidity network={props.network} account={props.account} />;
         }
-        return <RemoveLiquidity network={props.network} />;
+        return <RemoveLiquidity network={props.network} account={props.account} />;
     };
 
     const handleNewExchangeTokenChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -39,12 +62,19 @@ const Liquidity = (props: any) => {
 
     return (
         <div>
-            <div>
-                Liquidity
-            </div>
-            <CreateExchange />
-            <SwitchButton setAddState={setAddState}/>
-            {deploy_or_remove(addState)}
+            <Container>
+
+                <Paper className={classes.paperContainer}>
+
+                    <CreateExchange />
+
+                    <Typography variant="h5" className={classes.title}>
+                        <SwitchButton setAddState={setAddState} />
+                    </Typography>
+                    {add_or_remove(addState)}
+                </Paper>
+            </Container>
+
         </div>
     )
 }

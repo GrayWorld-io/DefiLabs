@@ -8,7 +8,7 @@ import * as COLORS from "@material-ui/core/colors";
 const styles = (theme: Theme) => createStyles ({
     container: {
         padding: theme.spacing(1),
-        minHeight: "80px",
+        minHeight: "68px",
         backgroundColor: COLORS.grey[50],
         borderRadius: theme.spacing(2),
         borderColor: COLORS.grey[300],
@@ -69,7 +69,7 @@ export default function TokenInputField(props: any) {
     const { onClick, symbol, value, onChange, activeField } = props;
 
     return (
-        <div className={classes.container_blank}>
+        <div className={classes.container}>
 
             <Grid
                 container
@@ -98,7 +98,7 @@ export default function TokenInputField(props: any) {
                         placeholder="0.0"
                         disabled={!activeField}
                         classes={{
-                            root: classes.container_input
+                            root: classes.input, input: classes.inputBase 
                         }}
                     />
                 </Grid>
