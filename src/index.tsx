@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import { Web3ReactProvider } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 
-function getLibrary(provider: Web3Provider) {
+function getLibrary() {
   const library = new Web3Provider(window.ethereum);
   return library
 }

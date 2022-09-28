@@ -20,7 +20,7 @@ const CreateExchange = (props: any) => {
 
     const handleCreateExchange = async () => {
         alert(newExchangeToken);
-        // await (getFactoryContract(props.network)).createExchange(newExchangeToken);
+        await (getFactoryContract(props.network)).createExchange(newExchangeToken);
     }
 
     return (

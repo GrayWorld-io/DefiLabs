@@ -4,8 +4,8 @@ import { getFactoryContract, getExchangeContract } from "../utils";
 export async function addLiquidity(inputTokenAddress: string, inputAmount: BigNumber, account: string, networkId: number) {
     const exchangeAddress = await getFactoryContract(networkId).getExchange(inputTokenAddress);
 
-    const outputAmount = getOutputAmount();
-    const Exchange = getExchangeContract(exchangeAddress).addLiquidity
+    // const outputAmount = getOutputAmount();
+    // const Exchange = getExchangeContract(exchangeAddress).addLiquidity
 }
 
 function getExchangeRate(

@@ -5,11 +5,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useWeb3React } from '@web3-react/core';
 import { SnackbarProvider } from "notistack";
 
-import { injected } from '../connectors/connector'
+import { injected } from '../connectors'
 
 import NavBar from '../components/NavBar/NavBar';
 import Swap from './Swap/Swap';
 import Liquidity from './Liquidity/Liquidity';
+
+
 
 import "./App.css";
 
@@ -54,6 +56,8 @@ const App = () => {
             <Route path="/" element={<Swap account={account} network={chainId} />} >
             </Route>
             <Route path="/liquidity" element={<Liquidity account={account} network={chainId} />} >
+            </Route>
+            <Route path="/farms" element={<Farms account={account} network={chainId} />} >
             </Route>
           </Routes>
         </BrowserRouter>
