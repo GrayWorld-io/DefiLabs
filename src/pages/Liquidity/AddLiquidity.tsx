@@ -14,8 +14,9 @@ import TokenSelectDialog from "../../components/TokenSelectDialog/TokenSelectDia
 import TokenInputField from "../../components/TokenInputField";
 import LoadingButton from "../../components/LoadingButton";
 
-import { getTokenBalanceAndSymbol, getAccountBalance } from "../../utils";
-
+import { getTokenBalanceAndSymbol, getAccountBalance } from "../../utils/ethers";
+import { getReserves, getLPTokenAmount } from "../../functions/cpmm";
+import { addLiquidity } from "../../functions/liquidity";
 
 const useStyles = makeStyles((theme) => ({
     paperContainer: {
@@ -26,30 +27,30 @@ const useStyles = makeStyles((theme) => ({
         overflow: "wrap",
         background: "linear-gradient(45deg, #ff0000 30%, #FF8E53 90%)",
         color: "white",
-      },
-      fullWidth: {
+    },
+    fullWidth: {
         width: "100%",
-      },
-      values: {
+    },
+    values: {
         width: "50%",
-      },
-      title: {
+    },
+    title: {
         textAlign: "center",
         padding: theme.spacing(0.5),
         marginBottom: theme.spacing(1),
-      },
-      hr: {
+    },
+    hr: {
         width: "100%",
-      },
-      balance: {
+    },
+    balance: {
         padding: theme.spacing(1),
         overflow: "wrap",
         textAlign: "center",
-      },
-      buttonIcon: {
+    },
+    buttonIcon: {
         marginRight: theme.spacing(1),
         padding: theme.spacing(0.4),
-      },
+    },
 }));
 
 const AddLiquidity = (props: any) => {
@@ -61,7 +62,6 @@ const AddLiquidity = (props: any) => {
 
     // Stores data about their respective coin
     const [coin1, setCoin1] = React.useState({
-        address: "",
         symbol: "",
         balance: "",
     });
@@ -117,7 +117,6 @@ const AddLiquidity = (props: any) => {
         const parsedInput1 = parseFloat(field1Value);
         const parsedInput2 = parseFloat(field2Value);
         return (
-            coin1.address &&
             coin2.address &&
             parsedInput1 !== NaN &&
             0 < parsedInput1 &&
@@ -129,22 +128,22 @@ const AddLiquidity = (props: any) => {
     };
 
 
-    const deploy = () => {
+    const callAddLiquidity = async () => {
         console.log("Attempting to add liquidity...");
         setLoading(true);
-
-
+        addLiquidity(reserves, field1Value, field2Value, coin2.address, props.network).then(() => {
+            setLoading(false);
+        });
     }
 
     // Called when the dialog window for coin1 exits
     const onToken1Selected = (tokenAddress: string) => {
-        // Close the dialog window
+        // Cldㄱose the dialog window
         setDialog1Open(false);
         if (tokenAddress == "ETH") {
             getAccountBalance(props.account)
                 .then((data) => {
                     setCoin1({
-                        address: tokenAddress,
                         symbol: data.symbol,
                         balance: data.balance
                     })
@@ -152,7 +151,7 @@ const AddLiquidity = (props: any) => {
         } else {
             getTokenBalanceAndSymbol(props.account, tokenAddress)
                 .then((data) => {
-                    setCoin1({
+                    setCoin2({
                         address: tokenAddress,
                         symbol: data.symbol,
                         balance: data.balance
@@ -193,11 +192,16 @@ const AddLiquidity = (props: any) => {
     // the new reserves will be calculated.
     useEffect(() => {
         console.log(
-            "Trying to get reserves between:\n" + coin1.address + "\n" + coin2.address
+            "Trying to get reserves between:\n" + coin2.address
         );
 
-
-    }, [coin1.address, coin2.address, props.network, props.account]);
+        getReserves(coin2.address, props.network).then((reserves) => {
+            setReserves(reserves);
+        });
+        getLPTokenAmount(coin2.address, props.account, props.network).then((balance) => {
+            setLiquidityTokens(balance);
+        });
+    }, [coin2.address, props.network, props.account]);
 
     // This hook creates a timeout that will run every ~10 seconds, it's role is to check if the user's balance has
     // updated has changed. This allows them to see when a transaction completes by looking at the balance output.
@@ -299,7 +303,7 @@ const AddLiquidity = (props: any) => {
                     <Grid container direction="row" justifyContent="center">
                         <Grid item xs={6}>
                             <Typography variant="body1" className={classes.balance}>
-                                {formatReserve(liquidityTokens, "UNI-V2")}
+                                {formatReserve(liquidityTokens, " ")}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -351,7 +355,7 @@ const AddLiquidity = (props: any) => {
                     valid={isButtonEnabled()}
                     success={false}
                     fail={false}
-                    onClick={deploy}
+                    onClick={callAddLiquidity}
                 >
                     <AccountBalanceIcon className={classes.buttonIcon} />
                     Add Liquidity

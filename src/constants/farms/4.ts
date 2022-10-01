@@ -1,11 +1,4 @@
 
-
-export const FACTORY_ADDRESSES: any = {
-  1: '0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95',
-  4: '0x43F71A1d6aA014293aF9E93fa73125D38d286D25',
-}
-
-
 export const RINKEBYCoins: any = [
   {
     name: "Ether",

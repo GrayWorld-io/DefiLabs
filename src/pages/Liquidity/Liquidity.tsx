@@ -50,23 +50,13 @@ const Liquidity = (props: any) => {
         return <RemoveLiquidity network={props.network} account={props.account} />;
     };
 
-    const handleNewExchangeTokenChange = (event: ChangeEvent<HTMLInputElement>) => {
-        event.preventDefault();
-        setNewExchangeTokenInput(event.target.value);
-    }
-
-    const handleCreateExchange = async () => {
-        alert(newExchangeToken);
-        // await (getFactoryContract(props.network)).createExchange(newExchangeToken);
-    }
-
     return (
         <div>
             <Container>
 
                 <Paper className={classes.paperContainer}>
 
-                    <CreateExchange />
+                    <CreateExchange network={props.network} account={props.account}/>
 
                     <Typography variant="h5" className={classes.title}>
                         <SwitchButton setAddState={setAddState} />

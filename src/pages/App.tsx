@@ -11,7 +11,7 @@ import NavBar from '../components/NavBar/NavBar';
 import Swap from './Swap/Swap';
 import Liquidity from './Liquidity/Liquidity';
 
-
+import Farms from './Farms/Farms';
 
 import "./App.css";
 

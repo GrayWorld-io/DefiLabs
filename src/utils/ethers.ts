@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { ethers, BigNumber } from "ethers";
 
 import { Token__factory } from "../constants/typechain-types";
 import { Exchange__factory } from "../constants/typechain-types";
@@ -19,6 +19,7 @@ export function getExchangeContract(contractAddress: string) {
 }
 
 export function getFactoryContract(networkId: number) {
+    console.log(FACTORY_ADDRESSES[networkId])
     return Factory__factory.connect(FACTORY_ADDRESSES[networkId], getSigner(getProvider()));
 }
 
@@ -38,4 +39,27 @@ export async function getAccountBalance(accountAddress:string) {
         balance: ethers.utils.formatEther(balance),
         symbol: 'ETH'
     }
+}
+
+export async function getTokenExchangeAddressFromFactory(tokenAddress: string, networkId: number) {
+    return getFactoryContract(networkId).getExchange(tokenAddress);
+}
+
+
+export function fromWei(to: BigNumber) {
+    return ethers.utils.formatEther(to.toString());
+}
+
+export function toWei(to: string) {
+    return ethers.utils.parseEther(to);
+}
+
+export async function onEthToTokenSwap(inputAmount: BigNumber, outputAmount: BigNumber, tokenAddress: string, networkId: number) {
+    const exchangeAddress = await getFactoryContract(networkId).getExchange(tokenAddress);
+    await getExchangeContract(exchangeAddress).ethToTokenSwap(outputAmount, {value: inputAmount});
+}
+
+export async function onAddLiquidity(addEthAmount: BigNumber, addTokenAmount: BigNumber, tokenAddress: string, networkId: number) {
+    const exchangeAddress = await getFactoryContract(networkId).getExchange(tokenAddress);
+    await getExchangeContract(exchangeAddress).addLiquidity(addTokenAmount, {value: addEthAmount});
 }

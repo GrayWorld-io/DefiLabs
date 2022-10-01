@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 import ethers from 'ethers';
 
-import { getFactoryContract } from '../../utils';
+import { getFactoryContract } from '../../utils/ethers';
 import { Button, makeStyles, TextField, Grid } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +19,7 @@ const CreateExchange = (props: any) => {
     }
 
     const handleCreateExchange = async () => {
-        alert(newExchangeToken);
+        console.log(newExchangeToken)
         await (getFactoryContract(props.network)).createExchange(newExchangeToken);
     }
 
