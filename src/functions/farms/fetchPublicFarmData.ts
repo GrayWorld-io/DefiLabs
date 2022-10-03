@@ -3,17 +3,17 @@ import chunk from 'lodash/chunk'
 import { SerializedFarm, SerializedFarmConfig } from "../../constants/types"
 import { MASTERCHEF_ADDRESSES } from "../../constants"
 import { multicall } from "../multicall"
-import { ERC20__factory } from "../../constants/typechain-types"
+import { Exchange__factory } from "../../constants/typechain-types"
 
 const fetchFarmCalls = (farm: SerializedFarm, chainId: number) => {
-    const { lpAddress, token, quoteToken } = farm
+    const { lpAddress, quoteToken } = farm
     return [
         // Balance of token in the LP contract
-        // {
-        //     address: token.address,
-        //     name: 'balanceOf',
-        //     params: [lpAddress],
-        // },
+        {
+            address: lpAddress,
+            name: 'getEthBalance',
+            params: [],
+        },
         // Balance of quote token on LP contract
         {
             address: quoteToken.address,
@@ -47,6 +47,6 @@ const fetchFarmCalls = (farm: SerializedFarm, chainId: number) => {
 export const fetchPublicFarmsData = async (farms: SerializedFarmConfig[], chainId: number): Promise<any[]> => {
     const farmCalls = farms.flatMap((farm) => fetchFarmCalls(farm, chainId))
     const chunkSize = farmCalls.length / farms.length
-    const farmMultiCallResult = await multicall({ abi: ERC20__factory.abi, calls: farmCalls, chainId: chainId })
+    const farmMultiCallResult = await multicall({ abi: Exchange__factory.abi, calls: farmCalls, chainId: chainId })
     return chunk(farmMultiCallResult, chunkSize)
 }

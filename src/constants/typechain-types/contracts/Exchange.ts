@@ -38,6 +38,7 @@ export interface ExchangeInterface extends utils.Interface {
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "ethToTokenSwap(uint256)": FunctionFragment;
     "ethToTokenTransfer(uint256,address)": FunctionFragment;
+    "getEthBalance()": FunctionFragment;
     "getOutputAmount(uint256,uint256,uint256)": FunctionFragment;
     "getOutputAmountNoFee(uint256,uint256,uint256)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
@@ -61,6 +62,7 @@ export interface ExchangeInterface extends utils.Interface {
       | "decreaseAllowance"
       | "ethToTokenSwap"
       | "ethToTokenTransfer"
+      | "getEthBalance"
       | "getOutputAmount"
       | "getOutputAmountNoFee"
       | "increaseAllowance"
@@ -102,6 +104,10 @@ export interface ExchangeInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "ethToTokenTransfer",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getEthBalance",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getOutputAmount",
@@ -177,6 +183,10 @@ export interface ExchangeInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "ethToTokenTransfer",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getEthBalance",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -372,6 +382,8 @@ export interface Exchange extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    getEthBalance(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     getOutputAmount(
       inputAmount: PromiseOrValue<BigNumberish>,
       inputReserve: PromiseOrValue<BigNumberish>,
@@ -472,6 +484,8 @@ export interface Exchange extends BaseContract {
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  getEthBalance(overrides?: CallOverrides): Promise<BigNumber>;
+
   getOutputAmount(
     inputAmount: PromiseOrValue<BigNumberish>,
     inputReserve: PromiseOrValue<BigNumberish>,
@@ -571,6 +585,8 @@ export interface Exchange extends BaseContract {
       _recipient: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    getEthBalance(overrides?: CallOverrides): Promise<BigNumber>;
 
     getOutputAmount(
       inputAmount: PromiseOrValue<BigNumberish>,
@@ -741,6 +757,8 @@ export interface Exchange extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    getEthBalance(overrides?: CallOverrides): Promise<BigNumber>;
+
     getOutputAmount(
       inputAmount: PromiseOrValue<BigNumberish>,
       inputReserve: PromiseOrValue<BigNumberish>,
@@ -841,6 +859,8 @@ export interface Exchange extends BaseContract {
       _recipient: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
+
+    getEthBalance(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getOutputAmount(
       inputAmount: PromiseOrValue<BigNumberish>,

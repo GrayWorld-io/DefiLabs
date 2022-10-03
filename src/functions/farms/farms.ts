@@ -1,15 +1,17 @@
 import BigNumber from 'bignumber.js';
+import { BigNumberish, ethers } from 'ethers';
 import { SerializedFarmConfig } from '../../constants/types';
 import { BIG_TEN, BIG_TWO, BIG_ZERO } from '../../utils/bigNumber';
-
+import { getMasterChefContract } from '../../utils/ethers';
 import { fetchMasterChefData } from './fetchMasterChefData';
 import { fetchPublicFarmsData } from './fetchPublicFarmData';
+
 
 export async function fetchFarms (farmsToFetch: SerializedFarmConfig[], chainId: number) {
     const farmResult = await fetchPublicFarmsData(farmsToFetch, chainId)
     const masterChefResult = await fetchMasterChefData(farmsToFetch, chainId)
     return farmsToFetch.map((farm, index) => {
-      const [tokenBalanceLP, quoteTokenBalanceLP, lpTokenBalanceMC, lpTotalSupply, tokenDecimals, quoteTokenDecimals] =
+      const [tokenBalanceLP, quoteTokenBalanceLP, lpTokenBalanceMC, lpTotalSupply, quoteTokenDecimals] =
         farmResult[index]
   
       const [info, totalAllocPoint] = masterChefResult[index]
@@ -20,7 +22,7 @@ export async function fetchFarms (farmsToFetch: SerializedFarmConfig[], chainId:
       const lpTokenRatio = new BigNumber(lpTokenBalanceMC).div(lpTotalSupplyBN)
   
       // Raw amount of token in the LP, including those not staked
-      const tokenAmountTotal = new BigNumber(tokenBalanceLP).div(BIG_TEN.pow(tokenDecimals))
+      const tokenAmountTotal = new BigNumber(tokenBalanceLP).div(BIG_TEN.pow(18))
       const quoteTokenAmountTotal = new BigNumber(quoteTokenBalanceLP).div(BIG_TEN.pow(quoteTokenDecimals))
   
       // Amount of quoteToken in the LP that are staked in the MC
@@ -46,3 +48,6 @@ export async function fetchFarms (farmsToFetch: SerializedFarmConfig[], chainId:
     })
   }
   
+  export async function stake (pid: BigNumberish, amount: string, chainId: number) {
+    await getMasterChefContract(chainId).deposit(pid, ethers.utils.parseEther(amount));
+  }

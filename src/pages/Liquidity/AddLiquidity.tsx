@@ -199,6 +199,21 @@ const AddLiquidity = (props: any) => {
         getLPTokenAmount(coin2.address, props.account, props.network).then((balance) => {
             setLiquidityTokens(balance);
         });
+        getAccountBalance(props.account)
+            .then((data) => {
+                setCoin1({
+                    symbol: data.symbol,
+                    balance: data.balance
+                })
+            })
+            getTokenBalanceAndSymbol(props.account, coin2.address)
+                .then((data) => {
+                    setCoin2({
+                        address: coin2.address,
+                        symbol: data.symbol,
+                        balance: data.balance
+                    })
+                });
     }, [coin2.address, props.network, props.account]);
 
     // This hook creates a timeout that will run every ~10 seconds, it's role is to check if the user's balance has
@@ -207,6 +222,12 @@ const AddLiquidity = (props: any) => {
         const coinTimeout = setTimeout(() => {
             console.log("Checking balances & Getting reserves...");
 
+            getReserves(coin2.address, props.network).then((reserves) => {
+                setReserves(reserves);
+            });
+            getLPTokenAmount(coin2.address, props.account, props.network).then((balance) => {
+                setLiquidityTokens(balance);
+            });
         }, 10000);
 
         return () => clearTimeout(coinTimeout);
