@@ -4,4 +4,9 @@
 export * as interfaces from "./interfaces";
 export { Exchange__factory } from "./Exchange__factory";
 export { Factory__factory } from "./Factory__factory";
+export { GrayToken__factory } from "./GrayToken__factory";
+export { MasterChef__factory } from "./MasterChef__factory";
+export { Multicall__factory } from "./Multicall__factory";
+export { StakingRewards__factory } from "./StakingRewards__factory";
+export { Timelock__factory } from "./Timelock__factory";
 export { Token__factory } from "./Token__factory";

@@ -1,15 +1,12 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import {
     Theme,
     Container,
-    Grid,
     makeStyles,
     createStyles,
     Paper,
     Typography,
 } from "@material-ui/core";
-
-import ethers from 'ethers';
 
 import CreateExchange from './CreateExchange';
 import SwitchButton from './SwitchButton';
@@ -38,8 +35,6 @@ const useStyles = makeStyles(styles);
 
 const Liquidity = (props: any) => {
     const classes = useStyles();
-
-    const [newExchangeToken, setNewExchangeTokenInput] = useState<string>('');
 
     const [addState, setAddState] = React.useState(true);
 

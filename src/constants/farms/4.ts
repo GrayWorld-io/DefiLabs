@@ -1,18 +1,21 @@
+import { tokens } from "../tokens/4"
+import { SerializedFarmConfig } from "../types"
 
-export const RINKEBYCoins: any = [
+const farms: SerializedFarmConfig[] = [
   {
-    name: "Ether",
-    abbr: "ETH",
-    address: "ETH", // Weth address is fetched from the router
+    pid: 0,
+    lpSymbol: 'ETH-GRAY LP',
+    lpAddress: '0x59e3C14f6727739923AC29A29828eDECAEA32d3e',
+    token: tokens[0],
+    quoteToken: tokens[1]
   },
   {
-    name: "GrayToken",
-    abbr: "GRAY",
-    address: "0x1deF2b6291B6BcD090ad0D428d35878B07FFaa25",
-  },
-  {
-    name: "Gray USD",
-    abbr: "GUSD",
-    address: "0x69d9B87AD42C2B86A4B7aCfaa8E3E5253313EB94",
+    pid: 1,
+    lpSymbol: 'ETH-GUSD LP',
+    lpAddress: '0x6f379825f8c8C209093347F4D46c8F05704Cca63',
+    token: tokens[0],
+    quoteToken: tokens[2]
   },
 ]
+
+export default farms

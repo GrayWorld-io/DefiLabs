@@ -19,7 +19,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import * as COLORS from "@material-ui/core/colors";
 
 import TokenItem from "./TokenItem";
-import { RINKEBYCoins } from "../../constants";
+import { tokens } from "../../constants/tokens/4";
 
 const styles = (theme: Theme) => createStyles({
     dialogContainer: {
@@ -154,7 +154,7 @@ export default function TokenSelectDialog(props: any) {
                     <Grid item className={classes.coinList}>
                         <Grid container direction="column">
                             {/* Maps all of the tokens in the constants file to buttons */}
-                            {RINKEBYCoins.map((coin: any, index: number) => (
+                            {tokens.map((coin: any, index: number) => (
                                 <Grid item key={index} xs={12}>
                                     <TokenItem
                                         coinName={coin.name}

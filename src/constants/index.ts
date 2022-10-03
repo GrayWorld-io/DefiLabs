@@ -5,21 +5,12 @@ export const FACTORY_ADDRESSES: any = {
   4: '0x43F71A1d6aA014293aF9E93fa73125D38d286D25',
 }
 
+export const MULTICALL_ADDRESSES: any = {
+  1: '0xc0A813754114947689ae73A6D8F76E4A90A87301',
+  4: '0xc0A813754114947689ae73A6D8F76E4A90A87301',
+}
 
-export const RINKEBYCoins: any = [
-  {
-    name: "Ether",
-    abbr: "ETH",
-    address: "ETH", // Weth address is fetched from the router
-  },
-  {
-    name: "GrayToken",
-    abbr: "GRAY",
-    address: "0x1deF2b6291B6BcD090ad0D428d35878B07FFaa25",
-  },
-  {
-    name: "Gray USD",
-    abbr: "GUSD",
-    address: "0x69d9B87AD42C2B86A4B7aCfaa8E3E5253313EB94",
-  },
-]
+export const MASTERCHEF_ADDRESSES: any = {
+  1: '0xeaA5987060F22Bfb9c4dF96B1de9fb5c4b4d256F',
+  4: '0xeaA5987060F22Bfb9c4dF96B1de9fb5c4b4d256F',
+}
