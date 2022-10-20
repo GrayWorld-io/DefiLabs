@@ -57,19 +57,21 @@ export default function FarmList(props: any) {
       }
     }
   ]
-  const { farms, userEarnings, account, chainId } = props;
+  const { farms, userEarnings, userStaked, account, chainId } = props;
   const [stakeDialogOpen, setStakeDialogOpen] = React.useState(false);
   const [stakeLPAddress, setStakeLPAddress] = React.useState('');
   const [stakePid, setStakePid] = React.useState(0);
-  let farmsWithEarnings = [];
+  let farmsWithUserData = [];
   const onDialogClose = () => {
     setStakeDialogOpen(false);
   }
+  console.log(userStaked)
   if (farms && farms.length) {
-    farmsWithEarnings = farms.map((farm: any, index: any) => {
+    farmsWithUserData = farms.map((farm: any, index: any) => {
       return {
         ...farm,
-        earning: new BigNumber(userEarnings[index]).div(BIG_TEN.pow(18))
+        earning: new BigNumber(userEarnings[index]).div(BIG_TEN.pow(18)),
+        deposited: new BigNumber(userStaked[index]).div(BIG_TEN.pow(18)),
       }
     })
   }
@@ -87,7 +89,7 @@ export default function FarmList(props: any) {
       />
       {farms && farms.length && (
         <div style={{ height: 300, width: '100%' }} >
-          <DataGrid rows={farmsWithEarnings} columns={columns} getRowId={(row: any) => row.pid} />
+          <DataGrid rows={farmsWithUserData} columns={columns} getRowId={(row: any) => row.pid} />
         </div>
       )}
 

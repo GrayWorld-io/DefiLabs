@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 
 import { fetchFarms } from "../../functions/farms/farms";
-import { fetchFarmUserEarnings } from "../../functions/farms/fetchFarmUser";
+import { fetchFarmUserEarnings, fetchFarmUserStakedBalances } from "../../functions/farms/fetchFarmUser";
 import { getFarmConfig } from "../../constants/farms";
 import { getFarmGrayRewardApr } from "../../functions/farms/apr";
 import { REWARD_PER_BLOCK } from "../../constants";
@@ -19,7 +19,7 @@ import { REWARD_PER_BLOCK } from "../../constants";
 const Farms = (props: any) => {
     const [farms, setFarms] = useState<any>();
     const [userEarnings, setUserEarnings] = useState<any>();
-    const [farmAPR, setFarmAPR] = useState<any>();
+    const [userStaked, setUserStaked] = useState<any>();
 
     useEffect(() => {
         getFarmConfig(props.network).then((farmsToFetch) => {
@@ -35,12 +35,15 @@ const Farms = (props: any) => {
             fetchFarmUserEarnings(props.account, farmsToFetch, props.network).then((earnings) => {
                 setUserEarnings(earnings);
             })
+            fetchFarmUserStakedBalances(props.account, farmsToFetch, props.network).then((staked) => {
+                setUserStaked(staked);
+            });
             
         })
     }, [props.account, props.network]);
     return (
         <Container>
-            <FarmList farms={farms} userEarnings={userEarnings} account={props.account} chainId={props.network}/>
+            <FarmList farms={farms} userEarnings={userEarnings} userStaked={userStaked} account={props.account} chainId={props.network}/>
         </Container>
 
     )
