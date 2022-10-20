@@ -2,5 +2,5 @@ import { InjectedConnector } from '@web3-react/injected-connector';
 
 //1:mainnet, 4:rinkeby
 export const injected = new InjectedConnector({
-  supportedChainIds: [1, 4]
+  supportedChainIds: [1, 4, 5, 1337]
 })

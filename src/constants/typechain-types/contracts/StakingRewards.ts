@@ -31,7 +31,6 @@ export interface StakingRewardsInterface extends utils.Interface {
   functions: {
     "balanceOf(address)": FunctionFragment;
     "earned(address)": FunctionFragment;
-    "exit()": FunctionFragment;
     "getReward()": FunctionFragment;
     "lastTimeRewardApplicable()": FunctionFragment;
     "lastUpdateTime()": FunctionFragment;
@@ -57,7 +56,6 @@ export interface StakingRewardsInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "balanceOf"
       | "earned"
-      | "exit"
       | "getReward"
       | "lastTimeRewardApplicable"
       | "lastUpdateTime"
@@ -87,7 +85,6 @@ export interface StakingRewardsInterface extends utils.Interface {
     functionFragment: "earned",
     values: [PromiseOrValue<string>]
   ): string;
-  encodeFunctionData(functionFragment: "exit", values?: undefined): string;
   encodeFunctionData(functionFragment: "getReward", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "lastTimeRewardApplicable",
@@ -161,7 +158,6 @@ export interface StakingRewardsInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "earned", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "exit", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getReward", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "lastTimeRewardApplicable",
@@ -277,10 +273,6 @@ export interface StakingRewards extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    exit(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     getReward(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -352,10 +344,6 @@ export interface StakingRewards extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  exit(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   getReward(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -426,8 +414,6 @@ export interface StakingRewards extends BaseContract {
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    exit(overrides?: CallOverrides): Promise<void>;
 
     getReward(overrides?: CallOverrides): Promise<void>;
 
@@ -508,10 +494,6 @@ export interface StakingRewards extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    exit(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     getReward(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -582,10 +564,6 @@ export interface StakingRewards extends BaseContract {
     earned(
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    exit(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     getReward(

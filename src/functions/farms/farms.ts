@@ -33,7 +33,7 @@ export async function fetchFarms (farmsToFetch: SerializedFarmConfig[], chainId:
   
       const allocPoint = info ? new BigNumber(info.allocPoint?._hex) : BIG_ZERO
       const poolWeight = totalAllocPoint ? allocPoint.div(new BigNumber(totalAllocPoint)) : BIG_ZERO
-  
+      
       return {
         ...farm,
         token: farm.token,

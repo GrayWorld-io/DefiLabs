@@ -72,7 +72,6 @@ export default function FarmList(props: any) {
         earning: new BigNumber(userEarnings[index]).div(BIG_TEN.pow(18))
       }
     })
-    console.log(farmsWithEarnings)
   }
   
   return (

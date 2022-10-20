@@ -19,7 +19,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import * as COLORS from "@material-ui/core/colors";
 
 import TokenItem from "./TokenItem";
-import { tokens } from "../../constants/tokens/4";
+import { tokens } from "../../constants/tokens/5";
 
 const styles = (theme: Theme) => createStyles({
     dialogContainer: {

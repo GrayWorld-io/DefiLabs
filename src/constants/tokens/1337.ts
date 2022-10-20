@@ -8,12 +8,12 @@ export const tokens: any = [
     {
       name: "GrayToken",
       abbr: "GRAY",
-      address: "0x1deF2b6291B6BcD090ad0D428d35878B07FFaa25",
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
     },
     {
       name: "Gray USD",
       abbr: "GUSD",
-      address: "0x69d9B87AD42C2B86A4B7aCfaa8E3E5253313EB94",
+      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
     },
   ]
   
